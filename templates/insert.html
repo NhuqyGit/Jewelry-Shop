@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        form{
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 40%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Insert</h1>
+    <form action="/insert" method="POST" enctype="multipart/form-data">
+        <input placeholder="name" type="text" name="name"/>
+        <select name="type">
+            <option value="1">Ring</option>
+            <option value="2">Glasses</option>
+            <option value="3">Necklace</option>
+            <option value="4">Bracelet</option>
+            <option value="5">Earrings</option>
+        </select>
+        <select name="collection">
+            <option value="1">Glint-Crack</option>
+            <option value="2">Baroque</option>
+            <option value="3">Bloody Hearts</option>
+            <option value="4">Lauris</option>
+            <option value="5">Fenix</option>
+            <option value="6">Flower</option>
+        </select>
+        <input placeholder="price" type="number" name="price"/>
+        <input placeholder="des" type="text" name="des"/>
+        <input placeholder="size" type="number" name="size"/>
+        <input placeholder="material" type="text" name="material"/>
+        <input placeholder="quantity" type="number" name="quantity"/>
+        <input placeholder="image" type="file" name="images" multiple>
+        <input type="submit" />
+    </form>
+</body>
+</html>

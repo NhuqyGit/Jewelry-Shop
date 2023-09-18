@@ -1,0 +1,98 @@
+.header-container{
+    display: flex;
+    font-family: 'Amiri', serif;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #000000;
+    border: 1px solid #fff;
+    border-right: none;
+    border-left: none;
+    padding: 18px 80px;
+    .logo{
+        a{
+            text-decoration: none;
+            
+            span{
+                color: white;
+                font-size: 25px;
+                }
+
+            .L{
+                color: #ffb724;
+            }
+        }
+    }
+
+    .nav{
+        display: flex;
+        ul{
+            display: flex;
+            align-items: center;
+            list-style-type: none;
+            li{
+                a{
+                    font-size: 16px;
+                    text-decoration: none;
+                    padding: 5px 0px;
+                    margin: 0 15px;
+                    text-transform: uppercase;
+                    color: white;
+                    transition: .5s;
+                }
+                &:hover{
+                    a{
+                        color: #ffb724;
+                        text-shadow: 0 0 10px rgba(255,180,26,.9);
+                    }
+                }
+            }
+        }
+    }
+
+    .left{
+        display: flex;
+        align-items: center;
+        
+        .btn-search, .btn-cart{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            span{
+                transition: .5s;
+            }
+            svg{
+                width: 30px;
+                path{
+                    fill: white;
+                    // stroke: aliceblue;
+                    transition: .5s;
+                }
+            }
+            
+            &:hover{
+                svg path{
+                    fill: #ffb724;
+                }
+                span{
+                    color: #ffb724;
+                }
+            }
+        }
+        
+        .btn-cart{
+            position: relative;
+            margin-left: 16px;
+            path{
+                stroke-width: 2px;
+            }
+            span{
+                position: absolute;
+                top: 12px;
+                left: 12px;
+                color: white;
+                line-height: 1;
+                font-size: 13px;
+            }
+        }
+    }
+}

@@ -1,0 +1,13 @@
+.admin{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .admin-container{
+        width: 40%;
+        form{
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+    }
+}

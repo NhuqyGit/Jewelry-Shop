@@ -1,0 +1,52 @@
+.card{
+    display: inline-block;
+    padding: 0 8px;
+    text-decoration: none;
+    height: 230px;
+    margin-bottom: 14px;
+    .card-image{
+        border: 1px solid rgb(255, 255, 255, 0.5);
+        height: 170px;
+        width: 200px;
+        transition: .5s;
+        overflow: hidden;
+        img{
+            height: 100%;
+            width: 100%;
+            
+        }
+        
+    }
+
+    .card-details{
+        opacity: 0;
+        border: 1px solid white;
+        border-top: none;
+        background-image: url("https://cdn.tranduythien.net/file/63b41924a55eb051ce25d19c");
+        transition: .5s;
+        text-align: center;
+        h4{
+            color: white;
+            font-size: 11px;
+            font-weight: 400;
+            line-height: 1;
+
+        }
+
+        .name{
+            padding-top: 10px;
+        }
+        .price{
+            padding: 6px 0;
+        }
+    }
+
+    &:hover{
+        .card-image{
+            border-color: white;
+        }
+        .card-details{
+            opacity: 1;
+        }
+    }
+}
