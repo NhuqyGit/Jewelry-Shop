@@ -1,13 +1,17 @@
-import {Link, BrowserRouter} from "react-router-dom"
+import {Link, BrowserRouter, useParams, useSearchParams} from "react-router-dom"
 import { NavLink} from "react-router-dom";
 import "./Header.scss"
+import { useState } from "react";
 
 
 function Header() {
+    const _path = useParams()["*"]
+    const [isOpen, setOpen] = useState(false)
+    console.log(_path)
     return ( 
         <>
             <header>
-                <div className="header-container">
+                <div className="header-container" style={_path === "collection" || _path === "jewelry" ? {border: "none"} : {border: "1px solid #fff"}}>
                     <div className="logo">
                         <Link to="/">
                             <span>NHUQY</span>
@@ -18,14 +22,16 @@ function Header() {
 
                     <div className="nav">
                         <ul className="nav-menu">
-                            <li><NavLink to="/all-products">Jewelry</NavLink></li>
+                            <li><NavLink to="/jewelry">Jewelry</NavLink></li>
                             <li><NavLink to="/sale-off">Sale Off</NavLink></li>
                             <li><NavLink to="/collection">Collection</NavLink></li>
+                            <li><NavLink to="/contact">Contact</NavLink></li>
+                            <li><NavLink to="/login">Login</NavLink></li>
                         </ul>
                     </div>
 
                     <div className="left">
-                        <div className="btn-search">
+                        <div className="btn-search" onClick={()=>setOpen(!isOpen)}>
                             <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 129 129" xmlnsXlink="http://www.w3.org/1999/xlink" enableBackground="new 0 0 129 129">
                                 <g>
                                     <path d="M51.6,96.7c11,0,21-3.9,28.8-10.5l35,35c0.8,0.8,1.8,1.2,2.9,1.2s2.1-0.4,2.9-1.2c1.6-1.6,1.6-4.2,0-5.8l-35-35   c6.5-7.8,10.5-17.9,10.5-28.8c0-24.9-20.2-45.1-45.1-45.1C26.8,6.5,6.5,26.8,6.5,51.6C6.5,76.5,26.8,96.7,51.6,96.7z M51.6,14.7   c20.4,0,36.9,16.6,36.9,36.9C88.5,72,72,88.5,51.6,88.5c-20.4,0-36.9-16.6-36.9-36.9C14.7,31.3,31.3,14.7,51.6,14.7z"/>
@@ -38,6 +44,12 @@ function Header() {
                             <span className="quantity-cart">0</span>
                         </div>
                     </div>
+                </div>
+
+                <div className={"search-bar" + (isOpen ? " open" : "")}>
+                    <form method="GET" action="/search">
+                        <input placeholder="input your keyword" name="keyword"></input>
+                    </form>
                 </div>
             </header>
         </>

@@ -1,0 +1,18 @@
+.search-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: calc(100vh - 86px - 57px);  
+    align-items: center;
+    p{
+        color: red;
+    }
+    .search-jew{
+        overflow-y: scroll;
+        h1{
+            color: red;
+            margin: 10px 0;
+        }
+        
+    }
+}

@@ -1,0 +1,10 @@
+.jewelry-container{
+    display: flex;
+    height: calc(100vh - 86px - 57px);
+    .jewelry-ant__rows{
+        display: flex;
+        overflow-y: scroll;
+        flex-flow: row wrap;
+
+    }
+}

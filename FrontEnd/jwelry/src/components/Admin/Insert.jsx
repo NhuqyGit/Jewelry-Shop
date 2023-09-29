@@ -154,7 +154,7 @@ function Insert() {
         <>
             <form onSubmit={handleSubmit}>
                 <input onChange={(e)=>handleChange(e)} placeholder="jewelry name" type="text" name="jewName" required/>
-                <select name="collection">
+                <select onChange={(e)=>handleChange(e)} name="idCol">
                     <option value="1">Glint-Crack</option>
                     <option value="2">Baroque</option>
                     <option value="3">Bloody Hearts</option>

@@ -57,8 +57,13 @@ func main() {
 	r.GET("/getAll", getUser)
 	r.GET("/insert", getInsertForm)
 	r.POST("/insert", h.HandleInsert(Db))
-	r.GET("/all-products", h.GetAllProduct(Db))
+	r.GET("/jewelry/all-products", h.GetAllProduct(Db))
+	r.GET("/jewelry/:type", h.GetTypePro(Db))
 	r.GET("/product/:id", h.GetProduct(Db))
+	r.GET("/collection", h.GetAllCollection(Db))
+	r.GET("/product-types", h.GetAllType(Db))
+	r.GET("/collection/:col", h.GetCollection(Db))
+	r.GET("/search", h.Search(Db))
 
 	err = r.Run("127.0.0.1:8080")
 	if err != nil {

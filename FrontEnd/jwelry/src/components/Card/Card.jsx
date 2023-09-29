@@ -4,7 +4,7 @@ function Card({jew}) {
     const sevPath="http://127.0.0.1:8080/"
     const priceFormat = new Intl.NumberFormat('en-DE').format(jew.price) + " vnđ"
     return ( 
-        <a className="card" href={"product/" + jew.idJew}>
+        <a className="card" href={`http://localhost:5173/product/${jew.idJew}`}>
             <div className="card-image">
                 <img src={sevPath + jew.images[0]} alt="" />
             </div>

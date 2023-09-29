@@ -7,7 +7,9 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 
+	col "JewelryShop/model/collection"
 	j "JewelryShop/model/jewelry"
+	tp "JewelryShop/model/jewtype"
 	"encoding/json"
 	"fmt"
 
@@ -185,6 +187,7 @@ func GetProduct(db *sql.DB) gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"errorJewData": err.Error()})
 			return
 		}
+		defer jewData.Close()
 
 		if jewData.Next() {
 			err := jewData.Scan(&jew.Id, &jew.TypeName, &jew.JewelryName, &jew.Price, &jew.Des, &images)
@@ -202,6 +205,8 @@ func GetProduct(db *sql.DB) gin.HandlerFunc {
 				c.JSON(http.StatusInternalServerError, gin.H{"errorJewDetail": err.Error()})
 				return
 			}
+			defer jewDetail.Close()
+
 			for jewDetail.Next() {
 				var size string
 				var quantity int
@@ -220,6 +225,8 @@ func GetProduct(db *sql.DB) gin.HandlerFunc {
 				c.JSON(http.StatusInternalServerError, gin.H{"errorAAA": err.Error()})
 				return
 			}
+			defer jewDetail.Close()
+
 			if jewDetail.Next() {
 				err := jewDetail.Scan(&jew.Material, &jew.Quantity)
 				if err != nil {
@@ -237,5 +244,151 @@ func GetProduct(db *sql.DB) gin.HandlerFunc {
 
 		c.JSON(http.StatusOK, jew)
 
+	}
+}
+
+func GetAllCollection(db *sql.DB) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		var listCol []col.Collection
+		stmt := "select * from collections"
+		rows, err := db.Query(stmt)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		defer rows.Close()
+		for rows.Next() {
+			var col col.Collection
+			err = rows.Scan(&col.IdColl, &col.CollName, &col.CollImage)
+			if err != nil {
+				ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+			listCol = append(listCol, col)
+		}
+
+		ctx.JSON(http.StatusOK, listCol)
+	}
+}
+
+func GetAllType(db *sql.DB) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		var listJewType []tp.JewType
+		stmt := "select * from jewelrytype"
+		rows, err := db.Query(stmt)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		}
+		defer rows.Close()
+
+		for rows.Next() {
+			var jewType tp.JewType
+			rows.Scan(&jewType.IdType, &jewType.TypeName, &jewType.TypeImage)
+
+			listJewType = append(listJewType, jewType)
+		}
+
+		ctx.JSON(http.StatusOK, listJewType)
+	}
+}
+
+func GetCollection(db *sql.DB) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		var listJew []j.Jewelry
+		col := ctx.Param("col")
+
+		stmt := `select j.IdJewelry, j.jewname, j.jewprice, i.pathimage
+		from jewelry j
+		LEFT JOIN JewelryImage i ON j.IdJewelry = i.IdJewelry and i.pathimage like "%400x400%"
+		where j.IdColl = ?`
+
+		rows, err := db.Query(stmt, col)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		defer rows.Close()
+
+		for rows.Next() {
+			var jew j.Jewelry
+			var imageStr string
+			err = rows.Scan(&jew.Id, &jew.JewelryName, &jew.Price, &imageStr)
+			if err != nil {
+				ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+			jew.Images = append(jew.Images, imageStr)
+			listJew = append(listJew, jew)
+		}
+
+		ctx.JSON(http.StatusOK, listJew)
+	}
+}
+
+func GetTypePro(db *sql.DB) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		var listJew []j.Jewelry
+		_type := ctx.Param("type")
+
+		stmt := `select j.IdJewelry, j.jewname, j.jewprice, i.pathimage
+		from jewelry j
+		LEFT JOIN JewelryImage i ON j.IdJewelry = i.IdJewelry and i.pathimage like "%400x400%"
+        LEFT JOIN JewelryType jt ON jt.IdType = j.IdType
+		where jt.TypeName = ?`
+
+		rows, err := db.Query(stmt, _type)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		defer rows.Close()
+
+		for rows.Next() {
+			var jew j.Jewelry
+			var imageStr string
+			err = rows.Scan(&jew.Id, &jew.JewelryName, &jew.Price, &imageStr)
+			if err != nil {
+				ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+			jew.Images = append(jew.Images, imageStr)
+			listJew = append(listJew, jew)
+		}
+
+		ctx.JSON(http.StatusOK, listJew)
+	}
+}
+
+func Search(db *sql.DB) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		var listJew []j.Jewelry
+		key := ctx.Query("keyword")
+		value := "%" + key + "%"
+		fmt.Println(key)
+		stmt := `select j.IdJewelry, j.jewname, j.jewprice, i.pathimage
+		from jewelry j
+		LEFT JOIN JewelryImage i ON j.IdJewelry = i.IdJewelry and i.pathimage like "%400x400%"
+		where j.JewName like ?`
+
+		rows, err := db.Query(stmt, value)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error12": err.Error()})
+			return
+		}
+		defer rows.Close()
+
+		for rows.Next() {
+			var jew j.Jewelry
+			var imageStr string
+			err = rows.Scan(&jew.Id, &jew.JewelryName, &jew.Price, &imageStr)
+			if err != nil {
+				ctx.JSON(http.StatusInternalServerError, gin.H{"error3": err.Error()})
+				return
+			}
+			jew.Images = append(jew.Images, imageStr)
+			listJew = append(listJew, jew)
+		}
+		ctx.JSON(http.StatusOK, listJew)
 	}
 }
