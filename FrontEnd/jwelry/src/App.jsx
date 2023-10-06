@@ -11,7 +11,7 @@ import JewCollection from './components/Collections/JewCollection'
 import Footer from './components/Footer/Footer'
 import JewelryType from './components/Jewelry/JewelryType'
 import Search from './components/Search/Search'
-import Login from './components/Login/Login'
+import Authentic from './components/Authentic/Authentic'
 
 function App() {
   
@@ -29,7 +29,7 @@ function App() {
           <Route path="collection" element={<Collection />} />
           <Route path="collection/:col" element={<JewCollection />} />
           <Route path="search" element={<Search />} />
-          <Route path="login" element={<Login />} />
+          <Route path="login" element={<Authentic />} />
         </Routes>
       </div>
 

@@ -12,6 +12,7 @@ import (
 	"os"
 
 	"github.com/gin-contrib/cors"
+	"github.com/gorilla/sessions"
 )
 
 type User struct {
@@ -29,7 +30,8 @@ type User struct {
 }
 
 var (
-	Db *sql.DB
+	Db    *sql.DB
+	Store = sessions.NewCookieStore([]byte("super-secret-key"))
 )
 
 func main() {
@@ -54,8 +56,6 @@ func main() {
 	config.AllowOrigins = []string{"http://localhost:5173"} // Thay thế bằng origin của ứng dụng ReactJS của bạn
 	r.Use(cors.New(config))
 
-	r.GET("/getAll", getUser)
-	r.GET("/insert", getInsertForm)
 	r.POST("/insert", h.HandleInsert(Db))
 	r.GET("/jewelry/all-products", h.GetAllProduct(Db))
 	r.GET("/jewelry/:type", h.GetTypePro(Db))
@@ -64,6 +64,10 @@ func main() {
 	r.GET("/product-types", h.GetAllType(Db))
 	r.GET("/collection/:col", h.GetCollection(Db))
 	r.GET("/search", h.Search(Db))
+	r.GET("/isEmailExist", h.IsEmailExist(Db))
+	r.GET("/isUsernameExist", h.IsUsernameExist(Db))
+	r.POST("/signup", h.SignUpAuth(Db, Store))
+	r.GET("/verify-email/:id/:token", h.VerifyEmail(Db))
 
 	err = r.Run("127.0.0.1:8080")
 	if err != nil {

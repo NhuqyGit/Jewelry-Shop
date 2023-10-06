@@ -1,12 +1,17 @@
 package handlers
 
 import (
+	"crypto/rand"
 	"database/sql"
+	"encoding/base64"
 	"net/http"
+	"net/smtp"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/gorilla/sessions"
 
+	u "JewelryShop/model/User"
 	col "JewelryShop/model/collection"
 	j "JewelryShop/model/jewelry"
 	tp "JewelryShop/model/jewtype"
@@ -18,7 +23,10 @@ import (
 	"strconv"
 	"strings"
 
+	"time"
+
 	"github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func HandleInsert(db *sql.DB) gin.HandlerFunc {
@@ -390,5 +398,167 @@ func Search(db *sql.DB) gin.HandlerFunc {
 			listJew = append(listJew, jew)
 		}
 		ctx.JSON(http.StatusOK, listJew)
+	}
+}
+
+// authentic
+func IsEmailExist(db *sql.DB) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		email := ctx.Query("email")
+		stmt := "select * from user where email = ?"
+		rows, err := db.Query(stmt, email)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		if rows.Next() {
+			ctx.JSON(http.StatusOK, gin.H{"status": true})
+			return
+		}
+		ctx.JSON(http.StatusOK, gin.H{"status": false})
+	}
+}
+
+func IsUsernameExist(db *sql.DB) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		username := ctx.Query("username")
+		stmt := "select * from user where username = ?"
+		rows, err := db.Query(stmt, username)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		if rows.Next() {
+			ctx.JSON(http.StatusOK, gin.H{"status": true})
+			return
+		}
+		ctx.JSON(http.StatusOK, gin.H{"status": false})
+	}
+}
+
+func generateRandomToken(length int) (string, error) {
+	bytes := make([]byte, length)
+	_, err := rand.Read(bytes)
+	if err != nil {
+		return "", err
+	}
+
+	// Sử dụng base64 để mã hóa dãy byte ngẫu nhiên thành một chuỗi
+	token := base64.RawURLEncoding.EncodeToString(bytes)
+	return token, nil
+}
+
+func VerifyEmail(db *sql.DB) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		token := c.Param("token")
+		id := c.Param("id")
+
+		stmt := "select * from user where email_token=?"
+		rows, err := db.Query(stmt, token)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		defer rows.Close()
+		if rows.Next() {
+			stmt = "UPDATE user SET isactive=1, email_token=? WHERE id=?;"
+			_, err := db.Exec(stmt, "", id)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+			c.JSON(http.StatusOK, gin.H{"status": true})
+		} else {
+			c.JSON(http.StatusOK, gin.H{"status": false})
+		}
+		// c.Redirect(http.StatusSeeOther, "/login")
+	}
+}
+
+func sendEmail(email, token, id string) error {
+	from := "kathonflag@gmail.com"
+	pass := "bmyqbgcpptvsrqdm"
+
+	smtpServer := "smtp.gmail.com"
+	smtpPort := "587"
+
+	subject := "TEST SENDING EMAIL"
+	body := fmt.Sprintf(`
+		<html>
+		<head>
+			<title>Xác thực địa chỉ email</title>
+		</head>
+		<body>
+			<a href="http://localhost:5173/verifyemailsuccess/%s/%s">Verify</a>
+		</body>
+		</html>
+	`, id, token)
+
+	auth := smtp.PlainAuth("", from, pass, smtpServer)
+
+	smtpAddr := fmt.Sprintf("%s:%s", smtpServer, smtpPort)
+	msg := []byte("Subject: " + subject + "\r\n" +
+		"To: " + email + "\r\n" +
+		"Content-Type: text/html; charset=UTF-8\r\n" +
+		"\r\n" +
+		body + "\r\n")
+
+	err := smtp.SendMail(smtpAddr, auth, from, []string{email}, msg)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func SignUpAuth(db *sql.DB, store *sessions.CookieStore) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		var user u.User
+		err := ctx.BindJSON(&user)
+		if err != nil {
+			fmt.Println("fail")
+			return
+		}
+		fmt.Println("user:", user)
+
+		user.Id = uuid.NewString()
+		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"Failed to hash pass": err.Error()})
+			return
+		}
+		fmt.Println("hash pass:", string(hashedPassword))
+		fmt.Println(user)
+
+		emailToken, err := generateRandomToken(8)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"Failed to generate token": err.Error()})
+			return
+		}
+		fmt.Println("Random Token:", emailToken)
+
+		currentTime := time.Now()
+		createAt := currentTime.Format("2006-01-02 15:04:05")
+		fmt.Println("Giờ hiện tại theo định dạng cụ thể:", createAt)
+
+		stmt := "INSERT INTO user (id, username, email, password_hashed, email_token, isActive, role, create_at) VALUES(?, ?, ?, ?, ?, ?, ?, ?)"
+		_, err = db.Exec(stmt, user.Id, user.Username, user.Email, hashedPassword, emailToken, 0, 0, createAt)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"insert fail": err.Error()})
+		}
+		ctx.JSON(http.StatusOK, gin.H{"status": "insert success"})
+
+		//Send email with email token
+		err = sendEmail(user.Email, emailToken, user.Id)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"send email fail": err.Error()})
+		}
+		ctx.JSON(http.StatusOK, gin.H{"sendEmail": "send success"})
+
+		session, _ := store.Get(ctx.Request, "session-user")
+		session.Values["UserId"] = user.Id
+		session.Values["IsActive"] = false
+		session.Save(ctx.Request, ctx.Writer)
 	}
 }

@@ -1,0 +1,31 @@
+.auth-container{
+    display: flex;
+    justify-content: center;
+    height: calc(100vh - 86px - 57px);
+    .auth-general{
+        width: 50%;
+        .auth-control{
+            display: flex;
+            color: white;
+            .login-btn, .signup-btn{
+                flex: 1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+            }
+    
+            .active{
+                background-color: aqua;
+            }
+        }
+        .login-form, .signup-form{
+            display: flex;
+            flex-direction: column;
+            span{
+                color: red;
+            }
+        }
+
+    }
+}
