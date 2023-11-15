@@ -11,6 +11,8 @@ import (
 	h "JewelryShop/handlers"
 	"os"
 
+	"github.com/joho/godotenv"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gorilla/sessions"
 )
@@ -36,7 +38,11 @@ var (
 
 func main() {
 	var err error
-	Db, err = sql.Open("mysql", "root:Nhuqy+#-1@tcp(127.0.0.1:3306)/bookstore")
+	godotenv.Load(".env")
+	dbUrl := os.Getenv("DATABASE_URL")
+	fmt.Println(dbUrl)
+	// Db, err = sql.Open("mysql", "root:Nhuqy+#-1@tcp(127.0.0.1:3306)/bookstore")
+	Db, err = sql.Open("mysql", dbUrl)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -53,7 +59,7 @@ func main() {
 	r.Static("/images", "./images")
 
 	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"http://localhost:5173"} // Thay thế bằng origin của ứng dụng ReactJS của bạn
+	config.AllowOrigins = []string{"http://localhost:5173", "https://jewelry-shop-theta.vercel.app/"} // Thay thế bằng origin của ứng dụng ReactJS của bạn
 	r.Use(cors.New(config))
 
 	r.POST("/insert", h.HandleInsert(Db))
