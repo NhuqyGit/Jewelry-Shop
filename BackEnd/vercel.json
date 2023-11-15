@@ -1,4 +1,4 @@
 {
     "framework": "go",
-    "build": "go build -o main ."
+    "buildCommand": "go build -o main ."
 }
