@@ -16,7 +16,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path='/admin/' element={<Admin />}>
           <Route path='insert' element={<Insert />} />
         </Route>
-        <Route path='/verifyemail' element={<VerifyEmail />} />
+        <Route path='/verifyemail/:id' element={<VerifyEmail />} />
         <Route path='/verifyemailsuccess/:id/:token' element={<VerifyEmailSuccess />} />
       </Routes>
     </Router>

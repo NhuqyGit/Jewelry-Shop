@@ -68,6 +68,7 @@ func main() {
 	r.GET("/isUsernameExist", h.IsUsernameExist(Db))
 	r.POST("/signup", h.SignUpAuth(Db, Store))
 	r.GET("/verify-email/:id/:token", h.VerifyEmail(Db))
+	r.GET("/send-email/:id", h.SendEmailHdl(Db))
 
 	err = r.Run("127.0.0.1:8080")
 	if err != nil {

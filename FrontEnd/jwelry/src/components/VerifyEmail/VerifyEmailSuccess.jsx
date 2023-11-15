@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import icon from "../../assets/icon-success.svg";
+import "./VerifyEmailSuccess.scss"
 
 function VerifyEmailSuccess() {
     const {id, token} = useParams()
@@ -16,21 +18,26 @@ function VerifyEmailSuccess() {
           })
         .then((data)=>{
             if (data && data.status === true) {
-                setTimeout(() => {
-                  navigate("/login");
-                }, 3000);
-              } else {
-                console.error("API response is invalid or empty.");
-              }
+              setTimeout(() => {
+                navigate("/login")
+              }, 3000);
+            } else {
+              console.error("API response is invalid or empty.");
+            }
         })
         .catch((error)=>{
             console.error("Fail so fetch username !!!!", error)
         })
     }, [])
     return (
-        <div className="verifyEmail-success">
-            <h1>Verify success</h1>
+      <div className="success-container">
+        <div className="a">
+            <img src={icon} alt=""/>
+            <h1>Verify Successfull!</h1>
+            {/* <p>A confirmation email has been sent to <b>ash@loremcompany.com</b>. Please open it and click the link inside to verify your email.</p> */}
+            {/* <button onClick={()=>{navigate("/login")}}>Dismiss message</button> */}
         </div>
+      </div>
     );
 }
 

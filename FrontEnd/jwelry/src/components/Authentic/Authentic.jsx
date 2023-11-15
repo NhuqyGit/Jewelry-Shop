@@ -77,8 +77,9 @@ function Authentic() {
         .then((response) => {
             // Xử lý khi gửi thành công
             console.log("Đăng ký thành công:", response.data);
+            console.log(response.data["userId"])
             // Thực hiện các hành động khác, ví dụ: chuyển hướng người dùng đến trang đăng nhập
-            navigate("/verifyemail")
+            navigate("/verifyemail/" + response.data["userId"])
         })
         .catch((error) => {
             // Xử lý khi gửi thất bại

@@ -477,6 +477,7 @@ func VerifyEmail(db *sql.DB) gin.HandlerFunc {
 	}
 }
 
+// Send email
 func sendEmail(email, token, id string) error {
 	from := "kathonflag@gmail.com"
 	pass := "bmyqbgcpptvsrqdm"
@@ -510,6 +511,47 @@ func sendEmail(email, token, id string) error {
 		return err
 	}
 	return nil
+}
+
+func SendEmailHdl(db *sql.DB) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		var email string
+		id := ctx.Param("id")
+		stmt := "select email from user where id = ?"
+
+		row, err := db.Query(stmt, id)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"err": err.Error()})
+			return
+		}
+
+		if row.Next() {
+			row.Scan(&email)
+		} else {
+			ctx.JSON(http.StatusOK, gin.H{"status": "id not found!"})
+			return
+		}
+
+		token, err := generateRandomToken(8)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"errGenToken": err.Error()})
+			return
+		}
+
+		stmt = "update user set email_token = ? where id = ?"
+		row, err = db.Query(stmt, token, id)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"err": err.Error()})
+			return
+		}
+
+		err = sendEmail(email, token, id)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"errSendEmail": err.Error()})
+			return
+		}
+		ctx.JSON(http.StatusOK, gin.H{"status": "send email sucess!!!"})
+	}
 }
 
 func SignUpAuth(db *sql.DB, store *sessions.CookieStore) gin.HandlerFunc {
@@ -546,19 +588,20 @@ func SignUpAuth(db *sql.DB, store *sessions.CookieStore) gin.HandlerFunc {
 		_, err = db.Exec(stmt, user.Id, user.Username, user.Email, hashedPassword, emailToken, 0, 0, createAt)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"insert fail": err.Error()})
+			return
 		}
-		ctx.JSON(http.StatusOK, gin.H{"status": "insert success"})
 
 		//Send email with email token
 		err = sendEmail(user.Email, emailToken, user.Id)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"send email fail": err.Error()})
+			return
 		}
-		ctx.JSON(http.StatusOK, gin.H{"sendEmail": "send success"})
+		ctx.JSON(http.StatusOK, gin.H{"status": "signup success", "userId": user.Id})
 
-		session, _ := store.Get(ctx.Request, "session-user")
-		session.Values["UserId"] = user.Id
-		session.Values["IsActive"] = false
-		session.Save(ctx.Request, ctx.Writer)
+		// session, _ := store.Get(ctx.Request, "session-user")
+		// session.Values["UserId"] = user.Id
+		// session.Values["IsActive"] = false
+		// session.Save(ctx.Request, ctx.Writer)
 	}
 }
