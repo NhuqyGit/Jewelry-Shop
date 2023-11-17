@@ -63,6 +63,9 @@ func main() {
 	r.Use(cors.New(config))
 
 	r.POST("/insert", h.HandleInsert(Db))
+	r.GET("/", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, gin.H{"message": "Successfully"})
+	})
 	r.GET("/jewelry/all-products", h.GetAllProduct(Db))
 	r.GET("/jewelry/:type", h.GetTypePro(Db))
 	r.GET("/product/:id", h.GetProduct(Db))
