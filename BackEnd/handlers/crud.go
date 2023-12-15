@@ -70,7 +70,7 @@ func HandleInsert(db *sql.DB) gin.HandlerFunc {
 
 		// query
 		// Insert Jew
-		stmt := "insert into jewelry values(?, ?, ?, ?, ?, ?)"
+		stmt := "insert into Jewelry values(?, ?, ?, ?, ?, ?)"
 		_, err = db.Exec(stmt, jew.Id, jewCol, jewType, jew.JewelryName, jewPrice, jew.Des)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"errJew": err.Error()})
@@ -184,7 +184,7 @@ func GetProduct(db *sql.DB) gin.HandlerFunc {
 		var images string
 		id := c.Param("id")
 		stmt := `select j.IdJewelry, TypeName, JewName, JewPrice, JewDes, GROUP_CONCAT(ji.PathImage) AS Images
-				from jewelry j 
+				from Jewelry j 
 				left join JewelryType jt on jt.IdType = j.IdType 
 				left join JewelryImage ji on ji.IdJewelry = j.IdJewelry
 				where j.IdJewelry = ?
@@ -307,7 +307,7 @@ func GetCollection(db *sql.DB) gin.HandlerFunc {
 		col := ctx.Param("col")
 
 		stmt := `select j.IdJewelry, j.jewname, j.jewprice, i.pathimage
-		from jewelry j
+		from Jewelry j
 		LEFT JOIN JewelryImage i ON j.IdJewelry = i.IdJewelry and i.pathimage like "%400x400%"
 		where j.IdColl = ?`
 
@@ -340,7 +340,7 @@ func GetTypePro(db *sql.DB) gin.HandlerFunc {
 		_type := ctx.Param("type")
 
 		stmt := `select j.IdJewelry, j.jewname, j.jewprice, i.pathimage
-		from jewelry j
+		from Jewelry j
 		LEFT JOIN JewelryImage i ON j.IdJewelry = i.IdJewelry and i.pathimage like "%400x400%"
         LEFT JOIN JewelryType jt ON jt.IdType = j.IdType
 		where jt.TypeName = ?`
@@ -375,7 +375,7 @@ func Search(db *sql.DB) gin.HandlerFunc {
 		value := "%" + key + "%"
 		fmt.Println(key)
 		stmt := `select j.IdJewelry, j.jewname, j.jewprice, i.pathimage
-		from jewelry j
+		from Jewelry j
 		LEFT JOIN JewelryImage i ON j.IdJewelry = i.IdJewelry and i.pathimage like "%400x400%"
 		where j.JewName like ?`
 
