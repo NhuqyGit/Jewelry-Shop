@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import "./Collection.scss"
 
 function Collection() {
-    const sevPath="https://jewelry-shop-bs1i.onrender.com/"
+    const sevPath="https://jewelry-shop-bs1i.onrender.com"
     const [col, setCol] = useState([])
     useEffect(()=>{
         fetch("https://jewelry-shop-bs1i.onrender.com/collection", {
