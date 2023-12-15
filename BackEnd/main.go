@@ -79,9 +79,20 @@ func main() {
 	r.GET("/verify-email/:id/:token", h.VerifyEmail(Db))
 	r.GET("/send-email/:id", h.SendEmailHdl(Db))
 
-	err = r.Run("127.0.0.1:8080")
+	// err = r.Run("127.0.0.1:8080")
+	// if err != nil {
+	// 	fmt.Println(err.Error())
+	// }
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	// Bắt đầu lắng nghe trên địa chỉ và cổng đã xác định
+	err = http.ListenAndServe(":"+port, r)
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println("Failed to start server:", err)
 	}
 }
 
