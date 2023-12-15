@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 import "./Collection.scss"
 
 function Collection() {
-    const sevPath="http://127.0.0.1:8080"
+    const sevPath="https://jewelry-shop-bs1i.onrender.com/"
     const [col, setCol] = useState([])
     useEffect(()=>{
-        fetch("http://127.0.0.1:8080/collection", {
+        fetch("https://jewelry-shop-bs1i.onrender.com/collection", {
             method: "GET"
         })
         .then((response)=>response.json())

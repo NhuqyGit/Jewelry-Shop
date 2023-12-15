@@ -7,7 +7,7 @@ function VerifyEmailSuccess() {
     const {id, token} = useParams()
     const navigate = useNavigate()
     useEffect(()=>{
-        fetch(`http://127.0.0.1:8080/verify-email/${id}/${token}`, {
+        fetch(`https://jewelry-shop-bs1i.onrender.com/verify-email/${id}/${token}`, {
             method: "GET"
         })
         .then((response)=>{

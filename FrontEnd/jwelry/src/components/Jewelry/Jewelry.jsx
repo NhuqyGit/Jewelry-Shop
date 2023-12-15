@@ -11,14 +11,14 @@ function Jewelry() {
     useEffect(()=>{
         var _url
         if (type === null || type === undefined){
-            _url = "http://127.0.0.1:8080/jewelry"
+            _url = "https://jewelry-shop-bs1i.onrender.com/jewelry"
             console.log("type1")
         }
         else if(type === "all-products"){
-            _url = "http://127.0.0.1:8080/jewelry/all-products"
+            _url = "https://jewelry-shop-bs1i.onrender.com/jewelry/all-products"
         }
         else{
-            _url = `http://127.0.0.1:8080/jewelry/${type}`
+            _url = `https://jewelry-shop-bs1i.onrender.com/jewelry/${type}`
             console.log("type2")
         }
         fetch(_url, {
@@ -33,7 +33,7 @@ function Jewelry() {
             console.error("Fail so fetch data all products !!!!", error)
             })
 
-        fetch("http://127.0.0.1:8080/product-types", {
+        fetch("https://jewelry-shop-bs1i.onrender.com/product-types", {
             method: "GET"
         })
             .then((response)=>response.json())
@@ -55,7 +55,7 @@ function Jewelry() {
         return (
             <a  key={j.IdType}
                 className="type-card"
-                href={`http://localhost:5173/jewelry/${listType[index]}`}
+                href={`https://jewelry-shop-6gb2-nhuqys-projects.vercel.app/jewelry/${listType[index]}`}
                 style={type===listType[index] ? {opacity: "1"} : null}>
                 <div className="type-image">
                     <img src={j.TypeImage} alt="" />
@@ -69,7 +69,7 @@ function Jewelry() {
     return ( 
         <div className="jewelry-container">
             <div className="jewelry-type">
-                <a className="all-btn" href="http://localhost:5173/jewelry/all-products">All Items</a>
+                <a className="all-btn" href="https://jewelry-shop-6gb2-nhuqys-projects.vercel.app/jewelry/all-products">All Items</a>
                 <div className="jewelry-type__container">
                     {listJewTYpe}
                 </div>

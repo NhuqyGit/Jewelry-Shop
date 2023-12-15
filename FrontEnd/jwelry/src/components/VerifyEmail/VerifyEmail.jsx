@@ -6,7 +6,7 @@ function VerifyEmail() {
     const navigate = useNavigate()
 
     const handleClick = () => {
-      fetch(`http://127.0.0.1:8080/send-email/${id}`, {
+      fetch(`https://jewelry-shop-bs1i.onrender.com/send-email/${id}`, {
             method: "GET"
         })
         .then((response)=>response.json())

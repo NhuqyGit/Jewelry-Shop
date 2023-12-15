@@ -4,10 +4,10 @@ import ring1 from "../../assets/ring1.png"
 import ring2 from "../../assets/ring2.png"
 
 function JewelryType() {
-    const sevPath="http://127.0.0.1:8080"
+    const sevPath="https://jewelry-shop-bs1i.onrender.com/"
     const [_type, setType] = useState([])
     useEffect(()=>{
-        fetch("http://127.0.0.1:8080/product-types", {
+        fetch("https://jewelry-shop-bs1i.onrender.com/product-types", {
             method: "GET"
         })
         .then((response)=>response.json())
