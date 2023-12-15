@@ -1,5 +1,5 @@
 ## DEPLOY ##
-- FrontEnd: [Netlify](https://jewelry-shop-6gb2.vercel.app/https://jewelry-shop-6gb2.vercel.app/)
+- FrontEnd: [Vercel](https://jewelry-shop-6gb2.vercel.app/https://jewelry-shop-6gb2.vercel.app/)
 - BackEnd: [Render](https://jewelry-shop-bs1i.onrender.com/)
 
 ## DEMO ##
