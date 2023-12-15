@@ -59,7 +59,7 @@ func main() {
 	r.Static("/images", "./images")
 
 	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"http://localhost:5173", "https://jewelry-shop-theta.vercel.app/"} // Thay thế bằng origin của ứng dụng ReactJS của bạn
+	config.AllowOrigins = []string{"http://localhost:5173", "https://jewelry-shop-6gb2.vercel.app/"} // Thay thế bằng origin của ứng dụng ReactJS của bạn
 	r.Use(cors.New(config))
 
 	r.POST("/insert", h.HandleInsert(Db))

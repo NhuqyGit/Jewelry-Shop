@@ -55,7 +55,7 @@ function Jewelry() {
         return (
             <a  key={j.IdType}
                 className="type-card"
-                href={`https://jewelry-shop-6gb2-nhuqys-projects.vercel.app/jewelry/${listType[index]}`}
+                href={`https://jewelry-shop-6gb2.vercel.app/jewelry/${listType[index]}`}
                 style={type===listType[index] ? {opacity: "1"} : null}>
                 <div className="type-image">
                     <img src={j.TypeImage} alt="" />
@@ -69,7 +69,7 @@ function Jewelry() {
     return ( 
         <div className="jewelry-container">
             <div className="jewelry-type">
-                <a className="all-btn" href="https://jewelry-shop-6gb2-nhuqys-projects.vercel.app/jewelry/all-products">All Items</a>
+                <a className="all-btn" href="https://jewelry-shop-6gb2.vercel.app/jewelry/all-products">All Items</a>
                 <div className="jewelry-type__container">
                     {listJewTYpe}
                 </div>

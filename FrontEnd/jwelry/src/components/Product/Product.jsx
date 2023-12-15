@@ -10,7 +10,7 @@ function Product() {
     console.log("jew:", jew)
 
     useEffect (()=>{
-        fetch(`http://127.0.0.1:8080/product/${id}`, {
+        fetch(`https://jewelry-shop-bs1i.onrender.com/product/${id}`, {
             method: "GET"
         })
         .then((response)=>response.json())

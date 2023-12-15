@@ -7,7 +7,7 @@ function JewCollection() {
     const [jew, setJew] = useState([])
     const { col } = useParams()
     useEffect(()=>{
-    fetch(`http://127.0.0.1:8080/collection/${col}`, {
+    fetch(`https://jewelry-shop-bs1i.onrender.com/collection/${col}`, {
         method: "GET"
     })
         .then((response)=>response.json())

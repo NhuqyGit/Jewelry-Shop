@@ -9,7 +9,7 @@ function Search() {
     const [input, setInput] = useState(searchParams.get("keyword"))
 
     useEffect(() => {
-        const _url = `http://127.0.0.1:8080/search?keyword=${input}`
+        const _url = `https://jewelry-shop-bs1i.onrender.com/search?keyword=${input}`
         fetch(_url, {
             method: "GET"
         })
