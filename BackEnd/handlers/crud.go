@@ -123,7 +123,7 @@ func HandleInsert(db *sql.DB) gin.HandlerFunc {
 		// Insert Images
 		form, _ := c.MultipartForm()
 		files := form.File["images"]
-		stmt = "insert into jewelryimage values(?, ?, ?)"
+		stmt = "insert into JewelryImage values(?, ?, ?)"
 		for _, image := range files {
 			ext := strings.ToLower(filepath.Ext(image.Filename))
 			if ext != ".jpg" && ext != ".png" {
@@ -185,8 +185,8 @@ func GetProduct(db *sql.DB) gin.HandlerFunc {
 		id := c.Param("id")
 		stmt := `select j.IdJewelry, TypeName, JewName, JewPrice, JewDes, GROUP_CONCAT(ji.PathImage) AS Images
 				from jewelry j 
-				left join jewelrytype jt on jt.IdType = j.IdType 
-				left join jewelryimage ji on ji.IdJewelry = j.IdJewelry
+				left join JewelryType jt on jt.IdType = j.IdType 
+				left join JewelryImage ji on ji.IdJewelry = j.IdJewelry
 				where j.IdJewelry = ?
 				group by j.IdJewelry, TypeName, JewName, JewPrice, JewDes`
 
@@ -258,7 +258,7 @@ func GetProduct(db *sql.DB) gin.HandlerFunc {
 func GetAllCollection(db *sql.DB) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var listCol []col.Collection
-		stmt := "select * from collections"
+		stmt := "select * from Collections"
 		rows, err := db.Query(stmt)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -283,7 +283,7 @@ func GetAllCollection(db *sql.DB) gin.HandlerFunc {
 func GetAllType(db *sql.DB) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var listJewType []tp.JewType
-		stmt := "select * from jewelrytype"
+		stmt := "select * from JewelryType"
 		rows, err := db.Query(stmt)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
