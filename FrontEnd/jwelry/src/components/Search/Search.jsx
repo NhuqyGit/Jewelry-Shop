@@ -1,6 +1,7 @@
 import { useLocation } from "react-router-dom";
 import "./Search.scss"
 import { useState, useEffect } from "react";
+import { URL_FE, URL_BE } from "../../../url/url";
 
 function Search() {
     const [jew, setJew] = useState([])
@@ -9,7 +10,7 @@ function Search() {
     const [input, setInput] = useState(searchParams.get("keyword"))
 
     useEffect(() => {
-        const _url = `https://jewelry-shop-bs1i.onrender.com/search?keyword=${input}`
+        const _url = `${URL_BE}/search?keyword=${input}`
         fetch(_url, {
             method: "GET"
         })

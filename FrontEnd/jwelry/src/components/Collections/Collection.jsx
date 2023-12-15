@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import "./Collection.scss"
+import { URL_FE, URL_BE } from "../../../url/url";
 
 function Collection() {
-    const sevPath="https://jewelry-shop-bs1i.onrender.com"
+    const sevPath=URL_BE
     const [col, setCol] = useState([])
     useEffect(()=>{
-        fetch("https://jewelry-shop-bs1i.onrender.com/collection", {
+        fetch(URL_BE+"/collection", {
             method: "GET"
         })
         .then((response)=>response.json())

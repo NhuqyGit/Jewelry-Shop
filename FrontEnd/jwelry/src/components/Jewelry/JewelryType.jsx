@@ -2,12 +2,13 @@ import { useState, useEffect } from "react";
 import "./JewelryType.scss"
 import ring1 from "../../assets/ring1.png"
 import ring2 from "../../assets/ring2.png"
+import { URL_FE, URL_BE } from "../../../url/url";
 
 function JewelryType() {
-    const sevPath="https://jewelry-shop-bs1i.onrender.com/"
+    const sevPath=URL_BE
     const [_type, setType] = useState([])
     useEffect(()=>{
-        fetch("https://jewelry-shop-bs1i.onrender.com/product-types", {
+        fetch(URL_BE+"/product-types", {
             method: "GET"
         })
         .then((response)=>response.json())

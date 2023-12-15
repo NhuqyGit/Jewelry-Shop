@@ -2,12 +2,13 @@ import { useState, useEffect } from "react"
 import Card from "../Card/Card"
 import { useParams } from "react-router-dom";
 import "./JewCollection.scss"
+import { URL_FE, URL_BE } from "../../../url/url";
 
 function JewCollection() {
     const [jew, setJew] = useState([])
     const { col } = useParams()
     useEffect(()=>{
-    fetch(`https://jewelry-shop-bs1i.onrender.com/collection/${col}`, {
+    fetch(`${URL_BE}/collection/${col}`, {
         method: "GET"
     })
         .then((response)=>response.json())

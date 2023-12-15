@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Axios from "axios";
 import "./Authentic.scss"
 import { useNavigate } from "react-router-dom";
+import { URL_FE, URL_BE } from "../../../url/url";
 function Authentic() {
     const navigate = useNavigate()
     const [username, setUsername] = useState("")
@@ -24,7 +25,7 @@ function Authentic() {
     const passwordValid = passwordRegex.test(password)
     
     useEffect(()=>{
-        fetch(`http://127.0.0.1:8080/isEmailExist?email=${email}`, {
+        fetch(`${URL_BE}/isEmailExist?email=${email}`, {
             method: "GET"
         })
         .then((response)=>response.json())
@@ -37,7 +38,7 @@ function Authentic() {
     }, [email])
 
     useEffect(()=>{
-        fetch(`http://127.0.0.1:8080/isUsernameExist?username=${username}`, {
+        fetch(`${URL_BE}/isUsernameExist?username=${username}`, {
             method: "GET"
         })
         .then((response)=>response.json())
@@ -73,7 +74,7 @@ function Authentic() {
         };
     
         // Gửi dữ liệu bằng Axios
-        Axios.post("http://127.0.0.1:8080/signup", data)
+        Axios.post(URL_BE+"/signup", data)
         .then((response) => {
             // Xử lý khi gửi thành công
             console.log("Đăng ký thành công:", response.data);

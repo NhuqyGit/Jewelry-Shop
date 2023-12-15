@@ -1,6 +1,7 @@
 import { useState,useEffect } from "react";
 import "./Product.scss"
 import { useParams } from "react-router-dom";
+import { URL_FE, URL_BE } from "../../../url/url";
 
 function Product() {
     // const [queryParameters] = useSearchParams()
@@ -10,7 +11,7 @@ function Product() {
     console.log("jew:", jew)
 
     useEffect (()=>{
-        fetch(`https://jewelry-shop-bs1i.onrender.com/product/${id}`, {
+        fetch(`${URL_BE}/product/${id}`, {
             method: "GET"
         })
         .then((response)=>response.json())

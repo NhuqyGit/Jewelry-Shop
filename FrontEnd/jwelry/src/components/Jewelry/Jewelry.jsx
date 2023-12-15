@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import Card from "../Card/Card"
 import { useParams } from "react-router-dom";
 import "./Jewelry.scss"
+import { URL_FE, URL_BE } from "../../../url/url";
 
 function Jewelry() {
     const [jew, setJew] = useState([])
@@ -11,14 +12,14 @@ function Jewelry() {
     useEffect(()=>{
         var _url
         if (type === null || type === undefined){
-            _url = "https://jewelry-shop-bs1i.onrender.com/jewelry"
+            _url = URL_BE  + "/jewelry"
             console.log("type1")
         }
         else if(type === "all-products"){
-            _url = "https://jewelry-shop-bs1i.onrender.com/jewelry/all-products"
+            _url = URL_BE  + "/jewelry/all-products"
         }
         else{
-            _url = `https://jewelry-shop-bs1i.onrender.com/jewelry/${type}`
+            _url = `${URL_BE}/jewelry/${type}`
             console.log("type2")
         }
         fetch(_url, {
@@ -33,7 +34,7 @@ function Jewelry() {
             console.error("Fail so fetch data all products !!!!", error)
             })
 
-        fetch("https://jewelry-shop-bs1i.onrender.com/product-types", {
+        fetch(URL_BE  + "/product-types", {
             method: "GET"
         })
             .then((response)=>response.json())
@@ -55,7 +56,7 @@ function Jewelry() {
         return (
             <a  key={j.IdType}
                 className="type-card"
-                href={`https://jewelry-shop-6gb2.vercel.app/jewelry/${listType[index]}`}
+                href={`${URL_FE}/jewelry/${listType[index]}`}
                 style={type===listType[index] ? {opacity: "1"} : null}>
                 <div className="type-image">
                     <img src={j.TypeImage} alt="" />
@@ -69,7 +70,7 @@ function Jewelry() {
     return ( 
         <div className="jewelry-container">
             <div className="jewelry-type">
-                <a className="all-btn" href="https://jewelry-shop-6gb2.vercel.app/jewelry/all-products">All Items</a>
+                <a className="all-btn" href={`${URL_FE}/jewelry/all-products`}>All Items</a>
                 <div className="jewelry-type__container">
                     {listJewTYpe}
                 </div>

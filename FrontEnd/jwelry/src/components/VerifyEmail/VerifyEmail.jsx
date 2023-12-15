@@ -1,12 +1,13 @@
 import { useNavigate, useParams } from "react-router-dom";
 import "./VerifyEmail.scss"
+import { URL_FE, URL_BE } from "../../../url/url";
 
 function VerifyEmail() {
     const { id } = useParams()
     const navigate = useNavigate()
 
     const handleClick = () => {
-      fetch(`https://jewelry-shop-bs1i.onrender.com/send-email/${id}`, {
+      fetch(`${URL_BE}/send-email/${id}`, {
             method: "GET"
         })
         .then((response)=>response.json())

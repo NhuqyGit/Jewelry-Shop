@@ -2,12 +2,13 @@ import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import icon from "../../assets/icon-success.svg";
 import "./VerifyEmailSuccess.scss"
+import { URL_FE, URL_BE } from "../../../url/url";
 
 function VerifyEmailSuccess() {
     const {id, token} = useParams()
     const navigate = useNavigate()
     useEffect(()=>{
-        fetch(`https://jewelry-shop-bs1i.onrender.com/verify-email/${id}/${token}`, {
+        fetch(`${URL_BE}/verify-email/${id}/${token}`, {
             method: "GET"
         })
         .then((response)=>{
