@@ -1,7 +1,7 @@
 ## DEPLOY ##
 - FrontEnd: [Vercel](https://jewelry-shop-6gb2.vercel.app/https://jewelry-shop-6gb2.vercel.app/)
 - BackEnd: [Render](https://jewelry-shop-bs1i.onrender.com/)
-
+- Database: [Freedb](https://freedb.tech/)
 ## DEMO ##
 
 ![Screenshot 2023-12-15 165117](https://github.com/NhuqyGit/Jewelry-Shop/assets/76780813/7aa8ce4b-28c8-4896-9d8c-29328a9115d7)
