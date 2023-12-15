@@ -1,8 +1,12 @@
 {
     "rewrites": [
         {
-            "source": "/jewelry/:type*",
+            "source": "/jewelry/:type",
             "destination": "/jewelry/:type"
+        },
+        {
+            "source": "/jewelry",
+            "destination": "/jewelry"
         }
     ]
   }
